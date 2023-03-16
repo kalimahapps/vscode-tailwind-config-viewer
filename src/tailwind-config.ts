@@ -1,0 +1,285 @@
+/* eslint-disable max-depth */
+/* eslint-disable guard-for-in */
+import path from 'node:path';
+import fs from 'node:fs';
+import dlv from 'dlv';
+
+/**
+ * File not found exception
+ *
+ * @param {string} message The exception message
+ */
+const FileNotFoundException = function(message: string) {
+	this.message = message;
+	this.name = 'FileNotFoundException';
+};
+
+/**
+ * Process and prepare the tailwind config.
+ * This code is mostly taken from tailwindcss.com repo and it
+ * has been minimally modified and converted to a class.
+ * It should not be drastically changes and need to be as close to
+ * the original as possible to ensure that it works as expected and
+ * that ic can be updated easily when needed in the future. This is
+ * why some eslint rules have been disabled for the whole file.
+ *
+ * @link  https://github.com/tailwindlabs/tailwindcss.com/blob/a29be90b7f2fb2560bfdc7778eb4de66af99d88a/next.config.js
+ */
+class TailwindConfig {
+	/**
+	 * The workspace root
+	 */
+	private workspaceRoot: string;
+
+	/**
+	 * The default tailwind config
+	 */
+	private defaultConfig: any;
+
+	/**
+	 * The negate value function from tailwindcss npm package
+	 */
+	private negateValue: any;
+
+	/**
+	 * The name class function from tailwindcss npm package
+	 */
+	private nameClass: any;
+
+	/**
+	 * List of utilities
+	 */
+	private utilities: any;
+
+	/**
+	 * Create a new TailwindConfig instance
+	 *
+	 * @param {string} workspaceRoot The workspace root
+	 */
+	constructor(workspaceRoot: string) {
+		this.workspaceRoot = workspaceRoot;
+	}
+
+	/**
+	 * Get the tailwind config.
+	 * This is the main function that is called to get the tailwind config.
+	 * It is not called through the constructor because it is an async function
+	 */
+	async getConfig() {
+		const workspaceConfigPathCjs = path.join(this.workspaceRoot, 'tailwind.config.cjs');
+		const workspaceConfigPath = path.join(this.workspaceRoot, 'tailwind.config.js');
+
+		// Check if the workspace config exists
+		const workspaceConfigExists = fs.existsSync(workspaceConfigPath);
+		const workspaceConfigCjsExists = fs.existsSync(workspaceConfigPathCjs);
+
+		if (!workspaceConfigExists && !workspaceConfigCjsExists) {
+			throw new FileNotFoundException(`No tailwind config found in ${this.workspaceRoot}. \nTried: \`${workspaceConfigPath}\` and \`${workspaceConfigPathCjs}\``);
+		}
+
+		const tailwindNodeModulesPath = path.join(this.workspaceRoot, 'node_modules', 'tailwindcss');
+
+		// Check if the tailwindcss npm package is installed
+		if (!fs.existsSync(tailwindNodeModulesPath)) {
+			throw new FileNotFoundException(
+				[
+					`tailwindcss package not found in ${this.workspaceRoot}`,
+					`Tried: \`${tailwindNodeModulesPath}\``,
+					'Did you forget to install the tailwindcss npm package?',
+				].join('\n')
+			);
+		}
+
+		// Get the available config options
+		const configFilePath = workspaceConfigExists ? workspaceConfigPath : workspaceConfigPathCjs;
+		const workspaceConfig = await import(configFilePath);
+
+		const pluginDefs = await import(path.join(
+			tailwindNodeModulesPath,
+			'lib',
+			'corePlugins.js'
+		));
+
+		const { corePlugins } = pluginDefs;
+
+		const resolveConfig = await import(path.join(tailwindNodeModulesPath, 'resolveConfig'));
+
+		this.defaultConfig = resolveConfig.default(workspaceConfig);
+
+		this.nameClass = await import(path.join(
+			tailwindNodeModulesPath,
+			'lib',
+			'util',
+			'nameClass'
+		));
+
+		this.negateValue = await import(path.join(
+			tailwindNodeModulesPath,
+			'lib',
+			'util',
+			'negateValue'
+		));
+
+		const resolvedConfig = {};
+
+		for (const pluginKey of Object.keys(corePlugins)) {
+			const plugin = corePlugins[pluginKey];
+
+			this.getUtilities(
+				plugin,
+				{ includeNegativeValues: true }
+			);
+			resolvedConfig[pluginKey] = this.utilities;
+		}
+
+		return resolvedConfig;
+	}
+
+	/**
+	 * Add a new utility to the utilities object
+	 *
+	 * @param {Array | object} utilities Utilities to process
+	 */
+	addUtilities(utilities) {
+		const utilitiesArray = Array.isArray(utilities) ? utilities : [utilities];
+		for (const util of utilitiesArray) {
+			for (const prop in util) {
+				for (const p in util[prop]) {
+					if (p.startsWith('@defaults')) {
+						delete util[prop][p];
+					}
+				}
+				this.utilities[prop] = this.normalizeProperties(util[prop]);
+			}
+		}
+	}
+
+	/**
+	 * Get the utilities for a given plugin
+	 *
+	 * @param {Function} plugin  Plugin function
+	 * @param {object}   options Options object
+	 */
+	getUtilities(plugin, options) {
+		if (!plugin) {
+			return;
+		}
+
+		const { includeNegativeValues = false } = options;
+
+		this.utilities = {};
+		console.log('plugin', plugin);
+		plugin({
+			addBase: () => {},
+			addDefaults: () => {},
+			addComponents: () => {},
+			corePlugins: () => { return true; },
+			prefix: (x) => { return x; },
+			config: (option, defaultValue) => { return (option ? defaultValue : { future: {} }); },
+			addUtilities: this.addUtilities.bind(this),
+			theme: (key, defaultValue) => {
+				return dlv(this.defaultConfig.theme, key, defaultValue);
+			},
+			// eslint-disable-next-line complexity
+			matchUtilities: (matches, data) => {
+				const values = data?.values;
+				const supportsNegativeValues = data?.supportsNegativeValues;
+
+				if (!values) {
+					return;
+				}
+
+				const modifierValues = Object.entries(values);
+
+				if (includeNegativeValues && supportsNegativeValues) {
+					const negativeValues = [];
+					for (const [key, value] of modifierValues) {
+						const negatedValue = this.negateValue.default(value);
+						if (negatedValue) {
+							negativeValues.push([`-${key}`, negatedValue]);
+						}
+					}
+					modifierValues.push(...negativeValues);
+				}
+
+				const result = Object.entries(matches).flatMap(([name, utilityFunction]) => {
+					return modifierValues
+						.map(([modifier, value]) => {
+							// @ts-ignore-start
+							const declarations = utilityFunction(value, {
+								includeRules(rules) {
+									this.addUtilities(rules);
+								},
+							});
+
+							// @ts-ignore-end
+
+							if (!declarations) {
+								return null;
+							}
+
+							const nameClassKey = this.nameClass.default(name, modifier);
+
+							return {
+								[nameClassKey]: declarations,
+							};
+						})
+						.filter(Boolean);
+				});
+
+				for (const object of result) {
+					for (const key in object) {
+						let deleteKey = false;
+						for (const subkey in object[key]) {
+							if (subkey.startsWith('@defaults')) {
+								delete object[key][subkey];
+								continue;
+							}
+							if (subkey.includes('&')) {
+								result.push({
+									[subkey.replaceAll('&', key)]: object[key][subkey],
+								});
+								deleteKey = true;
+							}
+						}
+
+						if (deleteKey) {
+							delete object[key];
+						}
+					}
+				}
+
+				this.addUtilities(result);
+			},
+		});
+	}
+
+	/**
+	 * Normalize the properties of an object
+	 *
+	 * @param  {object} input Object to normalize
+	 * @return {object}       Normalized object
+	 */
+	normalizeProperties (input) {
+		if (typeof input !== 'object') {
+			return input;
+		}
+
+		if (Array.isArray(input)) {
+			return input.map(this.normalizeProperties.bind(this));
+		}
+
+		return Object.keys(input).reduce((newObject, key) => {
+			const value = input[key];
+			const newValue = typeof value === 'object' ? this.normalizeProperties(value) : value;
+			newObject[key.replaceAll(/([a-z])([A-Z])/g, (m, p1, p2) => {
+				return `${p1}-${p2.toLowerCase()}`;
+			})] = newValue;
+			return newObject;
+		}, {});
+	}
+}
+
+export {
+	TailwindConfig
+};

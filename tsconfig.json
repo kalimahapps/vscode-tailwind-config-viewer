@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "commonjs",
+		"isolatedModules": true,
+		"outDir": "build",
+		"esModuleInterop": true,
+		"rootDir": "src",
+		"lib": [
+			"ES2022",
+			"dom"
+		]
+	},
+	"exclude": [
+		"node_modules",
+		".vscode/**/*",
+		"**/test/**/*",
+		"client",
+		"vite.config.ts"
+	]
+}

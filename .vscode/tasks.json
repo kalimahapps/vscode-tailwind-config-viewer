@@ -1,0 +1,71 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "watch",
+			"problemMatcher": "$tsc-watch",
+			"isBackground": true,
+			"presentation": {
+				"reveal": "never"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Create terminals",
+			"dependsOn": [
+				"Extension watch",
+				"Client watch"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			// Try start the task on folder open
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+		},
+		{
+			// The name that shows up in terminal tab
+			"label": "Extension watch",
+			// The task will launch a shell
+			"type": "shell",
+			"command": "pnpm build:watch",
+			// Set the shell type
+			// Mark as a background task to avoid the spinner animation on the terminal tab
+			"isBackground": true,
+			"problemMatcher": [],
+			// Create the tasks in a terminal group
+			"presentation": {
+				"group": "watch tasks"
+			},
+			"icon": {
+				"id": "terminal-bash",
+				"color": "terminal.ansiCyan"
+			},
+		},
+		{
+			"label": "Client watch",
+			"type": "shell",
+			"command": "pnpm build:watch",
+			"isBackground": true,
+			"problemMatcher": [],
+			"options": {
+				"cwd": "${workspaceFolder}/client"
+			},
+			"presentation": {
+				"group": "watch tasks",
+			},
+			"icon": {
+				"id": "terminal-bash",
+				"color": "terminal.ansiYellow"
+			}
+		},
+	]
+}

@@ -1,0 +1,76 @@
+{
+  "name": "tailwind-config-viewer",
+  "displayName": "Tailwind Config Viewer",
+  "description": "View Tailwind config for the current workspace",
+  "icon": "media/icon.png",
+  "publisher": "KalimahApps",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kalimahapps/vscode-tailwind-config-viewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kalimahapps/vscode-tailwind-config-viewer/issues"
+  },
+  "version": "0.0.0",
+  "preview": true,
+  "engines": {
+    "vscode": "^1.76.0",
+    "node": ">=14.0.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./build/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "tailwind-config-viewer",
+          "title": "Tailwind Config Viewer",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "tailwind-config-viewer": [
+        {
+          "type": "webview",
+          "id": "KalimahApps.tailwindcss-config-viewer",
+          "name": "Tailwind Config Viewer"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "build": "vite build",
+    "build:watch": "vite build --watch"
+  },
+  "devDependencies": {
+    "@kalimahapps/eslint-config": "^1.0.6",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@types/dlv": "^1.1.2",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.76.0",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
+    "@vscode/test-electron": "^2.3.0",
+    "@vue/tsconfig": "^0.1.3",
+    "eslint": "^8.36.0",
+    "typescript": "^4.9.5"
+  },
+  "keywords": [
+    "tailwind",
+    "tailwindcss",
+    "tailwindcss kit",
+    "css"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "dlv": "^1.1.3"
+  }
+}
