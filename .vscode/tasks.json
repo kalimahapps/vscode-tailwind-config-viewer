@@ -36,7 +36,7 @@
 			"label": "Extension watch",
 			// The task will launch a shell
 			"type": "shell",
-			"command": "pnpm build:watch",
+			"command": "pnpm watch",
 			// Set the shell type
 			// Mark as a background task to avoid the spinner animation on the terminal tab
 			"isBackground": true,

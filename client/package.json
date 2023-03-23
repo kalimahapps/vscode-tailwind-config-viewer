@@ -1,6 +1,6 @@
 {
   "name": "tailwind-config-viewer-webview",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "start": "vite",
     "build": "vue-tsc --noEmit && vite build",
@@ -14,14 +14,14 @@
   },
   "devDependencies": {
     "@kalimahapps/vue-icons": "^1.1.6",
-    "@types/node": "^18.15.3",
+    "@types/node": "^18.15.5",
     "@types/vscode-webview": "^1.57.1",
-    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue": "^4.1.0",
     "@vue/tsconfig": "^0.1.3",
     "sass": "^1.59.3",
     "typescript": "^4.9.5",
-    "vite": "^4.1.4",
-    "vue-tsc": "^1.3.2"
+    "vite": "^4.2.1",
+    "vue-tsc": "^1.3.4"
   },
   "engines": {
     "node": ">=14.0.0"

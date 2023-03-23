@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/kalimahapps/vscode-tailwind-config-viewer/issues"
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "preview": true,
   "engines": {
     "vscode": "^1.76.0",
@@ -46,9 +46,7 @@
     "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "package": "vsce package",
-    "build": "vite build",
-    "build:watch": "vite build --watch"
+    "package": "vsce package"
   },
   "devDependencies": {
     "@kalimahapps/eslint-config": "^1.0.6",

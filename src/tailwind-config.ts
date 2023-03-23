@@ -168,7 +168,7 @@ class TailwindConfig {
 		const { includeNegativeValues = false } = options;
 
 		this.utilities = {};
-		console.log('plugin', plugin);
+
 		plugin({
 			addBase: () => {},
 			addDefaults: () => {},
