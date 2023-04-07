@@ -1,5 +1,8 @@
 <h1 align="center">Tailwind Config Viewer</h1>
 <p align="center">
+<a target="_blank" href="https://www.npmjs.com/package/@kalimahapps/eslint-config">
+  <img src="https://img.shields.io/badge/ESLint%20Config-kalimahapps-blue?style=flat-square">
+</a>
 <a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=KalimahApps.tailwind-config-viewer">
   <img src="https://img.shields.io/visual-studio-marketplace/v/KalimahApps.tailwind-config-viewer?style=flat-square"></a>
   <a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=KalimahApps.tailwind-config-viewer">
