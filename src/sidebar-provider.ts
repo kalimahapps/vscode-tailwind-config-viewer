@@ -29,7 +29,7 @@ class SidebarProvider implements WebviewViewProvider {
 	/**
 	 * Update the webview content
 	 */
-	private async updateConfigData () {
+	private async updateConfigData() {
 		try {
 			const tailwindConfigInstance = new TailwindConfig(this.workspaceRoot);
 			const tailwindResolvedConfig = await tailwindConfigInstance.getConfig();
@@ -38,7 +38,7 @@ class SidebarProvider implements WebviewViewProvider {
 		} catch (error) {
 			const { name, message } = error;
 			window.showErrorMessage(message);
-			if (name === 'FileNotFoundException'){
+			if (name === 'FileNotFoundException') {
 				this.sendMessage('error', message);
 			}
 			console.error(' --- ERROR----', error);
@@ -64,7 +64,7 @@ class SidebarProvider implements WebviewViewProvider {
 
 		// Update the content based on view changes
 		webviewView.onDidChangeVisibility(() => {
-			if (webviewView.visible === true){
+			if (webviewView.visible === true) {
 				this.updateConfigData();
 			}
 		});
@@ -136,10 +136,10 @@ class SidebarProvider implements WebviewViewProvider {
 	 *
 	 * @return {string} Nonce
 	 */
-	getNonce() : string {
+	getNonce(): string {
 		let text = '';
 		const possible =
-		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 		for (let index = 0; index < 32; index++) {
 			text += possible.charAt(Math.floor(Math.random() * possible.length));
 		}

@@ -1,14 +1,16 @@
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-
 export default defineConfig({
+	define: {
+		'process.env': process.env
+	},
 	plugins: [vue()],
 	optimizeDeps: {
 		exclude: ['vscode'],
 	},
 	esbuild: {
-		pure: ['console'],
+		pure: ['console']
 	},
 	build: {
 		lib: {
@@ -18,7 +20,6 @@ export default defineConfig({
 		target: 'es2022',
 		emptyOutDir: true,
 		outDir: '../client-build',
-
 		rollupOptions: {
 			output: {
 				entryFileNames: 'assets/[name].js',

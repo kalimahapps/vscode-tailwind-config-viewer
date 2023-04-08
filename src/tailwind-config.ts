@@ -9,7 +9,7 @@ import dlv from 'dlv';
  *
  * @param {string} message The exception message
  */
-const FileNotFoundException = function(message: string) {
+const FileNotFoundException = function (message: string) {
 	this.message = message;
 	this.name = 'FileNotFoundException';
 };
@@ -20,7 +20,7 @@ const FileNotFoundException = function(message: string) {
  * has been minimally modified and converted to a class.
  * It should not be drastically changes and need to be as close to
  * the original as possible to ensure that it works as expected and
- * that ic can be updated easily when needed in the future. This is
+ * that it can be updated easily when needed in the future. This is
  * why some eslint rules have been disabled for the whole file.
  *
  * @link  https://github.com/tailwindlabs/tailwindcss.com/blob/a29be90b7f2fb2560bfdc7778eb4de66af99d88a/next.config.js
@@ -170,9 +170,9 @@ class TailwindConfig {
 		this.utilities = {};
 
 		plugin({
-			addBase: () => {},
-			addDefaults: () => {},
-			addComponents: () => {},
+			addBase: () => { },
+			addDefaults: () => { },
+			addComponents: () => { },
 			corePlugins: () => { return true; },
 			prefix: (x) => { return x; },
 			config: (option, defaultValue) => { return (option ? defaultValue : { future: {} }); },
@@ -260,7 +260,7 @@ class TailwindConfig {
 	 * @param  {object} input Object to normalize
 	 * @return {object}       Normalized object
 	 */
-	normalizeProperties (input) {
+	normalizeProperties(input) {
 		if (typeof input !== 'object') {
 			return input;
 		}

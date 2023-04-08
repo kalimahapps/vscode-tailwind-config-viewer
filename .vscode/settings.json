@@ -40,6 +40,7 @@
         "typescriptreact"
     ],
     "eslint.packageManager": "pnpm",
+    "npm.packageManager": "pnpm",
     "editor.defaultFormatter": null,
     "prettier.enable": false,
     "cSpell.allowCompoundWords": true,

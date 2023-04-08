@@ -50,7 +50,7 @@ window.addEventListener('message', (event) => {
 /**
  * Send a message to the extension to refresh the data
  */
-const refreshData = function() {
+const refreshData = function () {
 	vscode.postMessage({
 		command: 'refresh',
 	});
@@ -58,7 +58,7 @@ const refreshData = function() {
 </script>
 
 <style lang="scss">
-.error{
+.error {
 	padding: 1em;
 	border-left: 4px solid var(--vscode-editorOverviewRuler-errorForeground);
 	white-space: pre-wrap;
