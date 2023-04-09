@@ -26,7 +26,13 @@ View the config of your Tailwind CSS project in a sidebar. It will show you all 
 
 <br>
 
+# Changelog
+0.0.4
+- Added ESM support for tailwind.config.js
+
 # Development
+> Only use npm as a package manager as vsce commands will not work when other package managers are used.
+
 1. Clone the repo
 2. run `npm install`
 3. run `cd client && npm install`

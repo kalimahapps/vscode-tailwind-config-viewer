@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "ES2022",
-		"module": "commonjs",
+		"module": "CommonJS",
 		"isolatedModules": true,
 		"outDir": "build",
 		"esModuleInterop": true,

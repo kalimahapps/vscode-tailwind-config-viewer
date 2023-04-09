@@ -3,6 +3,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import dlv from 'dlv';
+import { requireFromString } from 'module-from-string';
 
 /**
  * File not found exception
@@ -92,7 +93,7 @@ class TailwindConfig {
 
 		// Get the available config options
 		const configFilePath = workspaceConfigExists ? workspaceConfigPath : workspaceConfigPathCjs;
-		const workspaceConfig = await import(configFilePath);
+		const workspaceConfig = await this.parseConfigFile(configFilePath);
 
 		const pluginDefs = await import(path.join(
 			tailwindNodeModulesPath,
@@ -133,6 +134,44 @@ class TailwindConfig {
 		}
 
 		return resolvedConfig;
+	}
+
+	/**
+	 * Parse tailwind config file based on package.json type
+	 *
+	 * @param  {string}       configFilePath The path to the config file
+	 * @return {Promise<any>}                The parsed config file
+	 */
+	parseConfigFile(configFilePath: string) {
+		// Check package.json for the type of the config file
+		const packageJsonPath = path.join(this.workspaceRoot, 'package.json');
+
+		if (!fs.existsSync(packageJsonPath)) {
+			throw new FileNotFoundException(`package.json was not found in ${this.workspaceRoot}. \nTried: \`${packageJsonPath}\``);
+		}
+
+		// eslint-disable-next-line unicorn/prefer-json-parse-buffer
+		const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+		const { type } = packageJson;
+
+		if (type !== 'module') {
+			return import(configFilePath);
+		}
+
+		/*
+		* Because VSCode extension is running in a electron environment,
+		* which does not support ES modules, we need to convert the
+		* config file to a commonjs file. This is a hacky way to do it
+		* but it works. It should be removed when VSCode supports ES modules.
+		*/
+		const configFileContent = fs.readFileSync(configFilePath, 'utf8');
+
+		// replace export default with module.exports
+		const newConfigFileContent = configFileContent.replace('export default', 'module.exports =');
+
+		// If the config file is a module, we need to convert it to a commonjs file
+		return requireFromString(newConfigFileContent);
 	}
 
 	/**
