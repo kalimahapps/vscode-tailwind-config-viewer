@@ -26,7 +26,16 @@ View the config of your Tailwind CSS project in a sidebar. It will show you all 
 
 <br>
 
+# Config
+`workspacePath`: Use if the config file is not in the root of the project. For example, if you have a monorepo and the config file is in the root of the workspace. Default is current workspace root.
+
+<br>
+
 # Changelog
+0.0.5
+- Added `workspacePath` config option.
+- Bug fix. Using `require` inside config file was causing an error if `{type: module}` is enabled.
+
 0.0.4
 - Added ESM support for tailwind.config.js
 

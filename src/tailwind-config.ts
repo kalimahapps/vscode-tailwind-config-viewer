@@ -171,7 +171,9 @@ class TailwindConfig {
 		const newConfigFileContent = configFileContent.replace('export default', 'module.exports =');
 
 		// If the config file is a module, we need to convert it to a commonjs file
-		return requireFromString(newConfigFileContent);
+		return requireFromString(newConfigFileContent, {
+			filename: configFilePath,
+		});
 	}
 
 	/**

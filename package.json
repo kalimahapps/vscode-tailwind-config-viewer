@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/kalimahapps/vscode-tailwind-config-viewer/issues"
   },
-  "version": "0.0.4",
+  "version": "0.0.5",
   "preview": true,
   "engines": {
     "vscode": "^1.76.0",
@@ -23,6 +23,17 @@
   "activationEvents": [],
   "main": "./build/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Tailwind Config Viewer",
+      "properties": {
+        "tailwindConfigViewer.workspacePath": {
+          "type": "string",
+          "title": "Project path",
+          "description": "Path to the project root directory. If not set, the extension will try to find the config file in the current workspace.",
+          "default": ""
+        }
+      }
+    },
     "viewsContainers": {
       "activitybar": [
         {

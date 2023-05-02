@@ -5,7 +5,7 @@ import type {
 	CancellationToken,
 	WebviewViewResolveContext
 } from 'vscode';
-import { Uri, window, SnippetString } from 'vscode';
+import { Uri, window, workspace } from 'vscode';
 import { TailwindConfig } from './tailwind-config';
 
 class SidebarProvider implements WebviewViewProvider {
@@ -31,7 +31,13 @@ class SidebarProvider implements WebviewViewProvider {
 	 */
 	private async updateConfigData() {
 		try {
-			const tailwindConfigInstance = new TailwindConfig(this.workspaceRoot);
+			let workspacePath = this.workspaceRoot;
+			const configWorkspacePath: string = workspace.getConfiguration('tailwindConfigViewer').get('workspacePath');
+			if (configWorkspacePath !== '') {
+				workspacePath = configWorkspacePath;
+			}
+
+			const tailwindConfigInstance = new TailwindConfig(workspacePath);
 			const tailwindResolvedConfig = await tailwindConfigInstance.getConfig();
 
 			this.sendMessage('init', tailwindResolvedConfig);
