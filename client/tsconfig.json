@@ -15,10 +15,5 @@
 				"node_modules/@kalimahapps/vue-icons/icons/*"
 			]
 		}
-	},
-	"references": [
-		{
-			// "path": "./tsconfig.vite-config.json"
-		}
-	]
+	}
 }
