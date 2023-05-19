@@ -28,10 +28,14 @@ View the config of your Tailwind CSS project in a sidebar. It will show you all 
 
 # Config
 `workspacePath`: Use if the config file is not in the root of the project. For example, if you have a monorepo and the config file is in the root of the workspace. Default is current workspace root.
+You can add either an absolute path (e.g. `C:/Users/username/project/tailwind.config.js`) or a relative path (e.g. `./tailwind.config.js`).
 
 <br>
 
 # Changelog
+0.0.6
+- `workspacePath` config option now supports relative paths.
+
 0.0.5
 - Added `workspacePath` config option.
 - Bug fix. Using `require` inside config file was causing an error if `{type: module}` is enabled.

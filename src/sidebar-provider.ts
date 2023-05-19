@@ -1,3 +1,4 @@
+import path from 'node:path';
 import type {
 	WebviewViewProvider,
 	Webview,
@@ -34,7 +35,10 @@ class SidebarProvider implements WebviewViewProvider {
 			let workspacePath = this.workspaceRoot;
 			const configWorkspacePath: string = workspace.getConfiguration('tailwindConfigViewer').get('workspacePath');
 			if (configWorkspacePath !== '') {
-				workspacePath = configWorkspacePath;
+				const isAbsolute = path.isAbsolute(configWorkspacePath);
+				workspacePath = isAbsolute ?
+					configWorkspacePath :
+					path.resolve(workspacePath, configWorkspacePath);
 			}
 
 			const tailwindConfigInstance = new TailwindConfig(workspacePath);

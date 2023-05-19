@@ -1,6 +1,6 @@
 {
   "name": "tailwind-config-viewer-webview",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "scripts": {
     "start": "vite",
     "build": "vue-tsc --noEmit && vite build",
