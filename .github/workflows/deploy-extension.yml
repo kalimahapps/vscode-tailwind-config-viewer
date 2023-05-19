@@ -14,7 +14,7 @@ jobs:
       - run: npm ci
       - run: cd client && npm ci
       - run: npm run compile
-      - run: cd client && run build
+      - run: cd client && npm run build
       - name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v1
         with:
