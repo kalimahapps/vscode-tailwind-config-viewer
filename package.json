@@ -80,7 +80,7 @@
   "icon": "media/icon.png",
   "preview": true,
   "engines": {
-    "vscode": "^1.76.0",
+    "vscode": "^1.78.0",
     "node": ">=16.0.0"
   }
 }
