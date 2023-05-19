@@ -17,7 +17,7 @@
 						class="clear-button"
 						@click="searchKeywords = ''"
 					>
-						<MdTwotoneClear />
+						<MdTwoToneClear />
 					</div>
 				</span>
 			</vscode-text-field>
@@ -80,7 +80,7 @@
 <script setup lang="ts">
 import { IoOutlineSearch } from '@kalimahapps/vue-icons/io';
 import { BsChevronRight } from '@kalimahapps/vue-icons/bs';
-import { MdTwotoneClear } from '@kalimahapps/vue-icons/md';
+import { MdTwoToneClear } from '@kalimahapps/vue-icons/md';
 import { IcRefreshDouble } from '@kalimahapps/vue-icons/ic';
 
 import { ref, computed, toRef } from 'vue';
