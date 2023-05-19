@@ -1,12 +1,12 @@
 {
   "name": "tailwind-config-viewer-webview",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "scripts": {
-    "start": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "build:watch": "vue-tsc --noEmit && vite build --watch",
     "preview": "vite preview --port 5050",
-    "typecheck": "vue-tsc --noEmit",
-    "build:watch": "vue-tsc --noEmit && vite build --watch"
+    "start": "vite",
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@vscode/webview-ui-toolkit": "^1.2.2",

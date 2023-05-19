@@ -21,17 +21,6 @@
 					</div>
 				</span>
 			</vscode-text-field>
-
-		<!--
-			<vscode-button
-			class="refresh-button"
-			appearance="icon"
-			aria-label="Refresh data"
-			@click="$emit('refresh')"
-			>
-			<IcRefreshDouble />
-			</vscode-button>
-		-->
 		</div>
 
 		<div class="container">
@@ -78,10 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { IoOutlineSearch } from '@kalimahapps/vue-icons/io';
-import { BsChevronRight } from '@kalimahapps/vue-icons/bs';
-import { MdTwoToneClear } from '@kalimahapps/vue-icons/md';
-import { IcRefreshDouble } from '@kalimahapps/vue-icons/ic';
+import { IoOutlineSearch, BsChevronRight, MdTwoToneClear } from '@kalimahapps/vue-icons';
 
 import { ref, computed, toRef } from 'vue';
 import type { Ref } from 'vue';

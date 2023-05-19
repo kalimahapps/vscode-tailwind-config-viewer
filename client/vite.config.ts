@@ -3,14 +3,14 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 export default defineConfig({
 	define: {
-		'process.env': process.env
+		'process.env': process.env,
 	},
 	plugins: [vue()],
 	optimizeDeps: {
 		exclude: ['vscode'],
 	},
 	esbuild: {
-		pure: ['console']
+		pure: ['console'],
 	},
 	build: {
 		lib: {

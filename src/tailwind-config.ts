@@ -24,7 +24,7 @@ const FileNotFoundException = function (message: string) {
  * that it can be updated easily when needed in the future. This is
  * why some eslint rules have been disabled for the whole file.
  *
- * @link  https://github.com/tailwindlabs/tailwindcss.com/blob/a29be90b7f2fb2560bfdc7778eb4de66af99d88a/next.config.js
+ * @see https://github.com/tailwindlabs/tailwindcss.com/blob/a29be90b7f2fb2560bfdc7778eb4de66af99d88a/next.config.js
  */
 class TailwindConfig {
 	/**
@@ -65,6 +65,9 @@ class TailwindConfig {
 	 * Get the tailwind config.
 	 * This is the main function that is called to get the tailwind config.
 	 * It is not called through the constructor because it is an async function
+	 *
+	 * @throws {FileNotFoundException} If the tailwind config file is not found
+	 * @return {object} The tailwind config
 	 */
 	async getConfig() {
 		const workspaceConfigPathCjs = path.join(this.workspaceRoot, 'tailwind.config.cjs');
@@ -211,9 +214,9 @@ class TailwindConfig {
 		this.utilities = {};
 
 		plugin({
-			addBase: () => { },
-			addDefaults: () => { },
-			addComponents: () => { },
+			addBase: () => {},
+			addDefaults: () => {},
+			addComponents: () => {},
 			corePlugins: () => { return true; },
 			prefix: (x) => { return x; },
 			config: (option, defaultValue) => { return (option ? defaultValue : { future: {} }); },
