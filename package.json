@@ -3,7 +3,7 @@
   "name": "tailwind-config-viewer",
   "displayName": "Tailwind Config Viewer",
   "description": "View Tailwind config for the current workspace",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "repository": {
     "type": "git",
     "url": "https://github.com/kalimahapps/vscode-tailwind-config-viewer.git"

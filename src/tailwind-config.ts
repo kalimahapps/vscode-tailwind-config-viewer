@@ -4,6 +4,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import dlv from 'dlv';
 import { requireFromString } from 'module-from-string';
+import { transform } from 'esbuild';
 
 /**
  * File not found exception
@@ -69,16 +70,37 @@ class TailwindConfig {
 	 * @throws {FileNotFoundException} If the tailwind config file is not found
 	 * @return {object} The tailwind config
 	 */
+	/* eslint max-lines-per-function: ["warn", 120] */
 	async getConfig() {
 		const workspaceConfigPathCjs = path.join(this.workspaceRoot, 'tailwind.config.cjs');
 		const workspaceConfigPath = path.join(this.workspaceRoot, 'tailwind.config.js');
+		const workspaceConfigPathTs = path.join(this.workspaceRoot, 'tailwind.config.ts');
 
 		// Check if the workspace config exists
 		const workspaceConfigExists = fs.existsSync(workspaceConfigPath);
 		const workspaceConfigCjsExists = fs.existsSync(workspaceConfigPathCjs);
+		const workspaceConfigTsExists = fs.existsSync(workspaceConfigPathTs);
 
-		if (!workspaceConfigExists && !workspaceConfigCjsExists) {
-			throw new FileNotFoundException(`No tailwind config found in ${this.workspaceRoot}. \nTried: \`${workspaceConfigPath}\` and \`${workspaceConfigPathCjs}\``);
+		const doesConfigExist = [
+			workspaceConfigExists,
+			workspaceConfigCjsExists,
+			workspaceConfigTsExists,
+		].some(Boolean);
+
+		console.log('-----',
+			doesConfigExist,
+			workspaceConfigExists,
+			workspaceConfigCjsExists,
+			workspaceConfigPathTs);
+
+		if (!doesConfigExist) {
+			throw new FileNotFoundException(
+				[
+					`No tailwind config found in ${this.workspaceRoot}.`,
+					'\nTried: `tailwind.config.js`, `tailwind.config.cjs`,',
+					`\`tailwind.config.ts\` in ${this.workspaceRoot}`,
+				].join('')
+			);
 		}
 
 		const tailwindNodeModulesPath = path.join(this.workspaceRoot, 'node_modules', 'tailwindcss');
@@ -94,9 +116,24 @@ class TailwindConfig {
 			);
 		}
 
-		// Get the available config options
-		const configFilePath = workspaceConfigExists ? workspaceConfigPath : workspaceConfigPathCjs;
-		const workspaceConfig = await this.parseConfigFile(configFilePath);
+		let workspaceConfig = {};
+		if (workspaceConfigTsExists) {
+			const { code } = await transform(
+				fs.readFileSync(workspaceConfigPathTs, 'utf8'),
+				{
+					target: 'es2022',
+					loader: 'ts',
+				}
+			);
+			workspaceConfig = code;
+		} else {
+			// Get the available config options
+			const configFilePath =
+			workspaceConfigExists
+				? workspaceConfigPath
+				: workspaceConfigPathCjs;
+			workspaceConfig = await this.parseConfigFile(configFilePath);
+		}
 
 		const pluginDefs = await import(path.join(
 			tailwindNodeModulesPath,
