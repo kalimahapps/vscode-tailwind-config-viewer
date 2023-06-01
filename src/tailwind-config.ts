@@ -4,8 +4,6 @@ import path from 'node:path';
 import fs from 'node:fs';
 import dlv from 'dlv';
 import { requireFromString } from 'module-from-string';
-import { transform } from 'esbuild';
-import ts from 'typescript';
 
 /**
  * File not found exception
@@ -113,14 +111,18 @@ class TailwindConfig {
 
 		let workspaceConfig = {};
 		if (workspaceConfigTsExists) {
-			workspaceConfig = await ts.transpileModule(
+			const { transpileModule, ModuleKind } = await this.getTypescriptModule();
+
+			const transpile = transpileModule(
 				fs.readFileSync(workspaceConfigPathTs, 'utf8'),
 				{
 					compilerOptions: {
-						module: ts.ModuleKind.ES2022,
+						module: ModuleKind.ES2022,
 					},
 				}
 			);
+
+			workspaceConfig = transpile.outputText;
 		} else {
 			// Get the available config options
 			const configFilePath =
@@ -129,7 +131,7 @@ class TailwindConfig {
 				: workspaceConfigPathCjs;
 			workspaceConfig = await this.parseConfigFile(configFilePath);
 		}
-
+		console.log('>>>>>>>>>', workspaceConfig);
 		const pluginDefs = await import(path.join(
 			tailwindNodeModulesPath,
 			'lib',
@@ -169,6 +171,29 @@ class TailwindConfig {
 		}
 
 		return resolvedConfig;
+	}
+
+	/**
+	 * Get local typescript module
+	 *
+	 * @throws {FileNotFoundException} If the typescript module is not found
+	 * @return {Promise<any>} The typescript module
+	 */
+	async getTypescriptModule() :Promise<any>{
+		const tsNodeModulePath = path.join(this.workspaceRoot, 'node_modules', 'typescript');
+
+		// Check if the typescript npm package is installed
+		if (!fs.existsSync(tsNodeModulePath)) {
+			throw new FileNotFoundException(
+				[
+					`typescript package not found in ${this.workspaceRoot}`,
+					`Tried: \`${tsNodeModulePath}\``,
+					'Did you forget to install the typescript npm package?',
+				].join('\n')
+			);
+		}
+
+		return await import(tsNodeModulePath);
 	}
 
 	/**
