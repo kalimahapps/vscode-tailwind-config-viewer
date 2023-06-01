@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import dlv from 'dlv';
 import { requireFromString } from 'module-from-string';
 import { transform } from 'esbuild';
+import ts from 'typescript';
 
 /**
  * File not found exception
@@ -87,12 +88,6 @@ class TailwindConfig {
 			workspaceConfigTsExists,
 		].some(Boolean);
 
-		console.log('-----',
-			doesConfigExist,
-			workspaceConfigExists,
-			workspaceConfigCjsExists,
-			workspaceConfigPathTs);
-
 		if (!doesConfigExist) {
 			throw new FileNotFoundException(
 				[
@@ -118,14 +113,14 @@ class TailwindConfig {
 
 		let workspaceConfig = {};
 		if (workspaceConfigTsExists) {
-			const { code } = await transform(
+			workspaceConfig = await ts.transpileModule(
 				fs.readFileSync(workspaceConfigPathTs, 'utf8'),
 				{
-					target: 'es2022',
-					loader: 'ts',
+					compilerOptions: {
+						module: ts.ModuleKind.ES2022,
+					},
 				}
 			);
-			workspaceConfig = code;
 		} else {
 			// Get the available config options
 			const configFilePath =
