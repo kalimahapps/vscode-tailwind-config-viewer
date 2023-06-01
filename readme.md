@@ -21,6 +21,11 @@ View the config of your Tailwind CSS project in a sidebar. It will show you all 
 <br>
 <br>
 
+# Config file order
+The extension will first priorties `tailwind.config.ts` then `tailwind.config.js` then `tailwind.config.cks`
+
+<br>
+<br>
 # Screenshots
 ![Alt text](screenshots/accent-colors.png)
 
@@ -33,6 +38,9 @@ You can add either an absolute path (e.g. `C:/Users/username/project/tailwind.co
 <br>
 
 # Changelog
+0.0.8
+- Add support for `tailwind.config.ts` file.
+
 0.0.6
 - `workspacePath` config option now supports relative paths.
 
