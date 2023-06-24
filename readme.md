@@ -22,12 +22,13 @@ View the config of your Tailwind CSS project in a sidebar. It will show you all 
 <br>
 
 # Config file order
-The extension will first priorties `tailwind.config.ts` then `tailwind.config.js` then `tailwind.config.cks`
+The extension will first priorties `tailwind.config.ts` then `tailwind.config.js` then `tailwind.config.cjs`
 
 <br>
 <br>
 # Screenshots
-![Alt text](screenshots/accent-colors.png)
+
+![Accent colors](https://github.com/kalimahapps/vscode-tailwind-config-viewer/raw/HEAD/screenshots/accent-colors.png)
 
 <br>
 
