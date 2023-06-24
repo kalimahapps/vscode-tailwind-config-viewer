@@ -22,7 +22,7 @@ View the config of your Tailwind CSS project in a sidebar. It will show you all 
 <br>
 
 # Config file order
-The extension will first priorties `tailwind.config.ts` then `tailwind.config.js` then `tailwind.config.cks`
+The extension will first priorties `tailwind.config.ts` then `tailwind.config.js` then `tailwind.config.cjs`
 
 <br>
 <br>
