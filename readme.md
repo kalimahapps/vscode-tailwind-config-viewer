@@ -26,6 +26,7 @@ The extension will first priorties `tailwind.config.ts` then `tailwind.config.js
 
 <br>
 <br>
+
 # Screenshots
 
 ![Accent colors](https://github.com/kalimahapps/vscode-tailwind-config-viewer/raw/HEAD/screenshots/accent-colors.png)
