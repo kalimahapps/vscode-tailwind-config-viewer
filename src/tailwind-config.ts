@@ -131,7 +131,7 @@ class TailwindConfig {
 				: workspaceConfigPathCjs;
 			workspaceConfig = await this.parseConfigFile(configFilePath);
 		}
-		console.log('>>>>>>>>>', workspaceConfig);
+
 		const pluginDefs = await import(path.join(
 			tailwindNodeModulesPath,
 			'lib',
