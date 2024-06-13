@@ -3,7 +3,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import dlv from 'dlv';
-import { requireFromString } from 'module-from-string';
+import { requireFromString, importFromString } from 'module-from-string';
 
 /**
  * File not found exception
@@ -122,7 +122,8 @@ class TailwindConfig {
 				}
 			);
 
-			workspaceConfig = transpile.outputText;
+			const importConfig = await importFromString(transpile.outputText);
+			workspaceConfig = importConfig.default;
 		} else {
 			// Get the available config options
 			const configFilePath =
